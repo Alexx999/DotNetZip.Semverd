@@ -41,17 +41,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Zlib.Portable\Zlib.Portable.csproj">
-      <Project>{27c3f919-13f1-4f71-a169-56eb5982cd6d}</Project>
-      <Name>Zlib.Portable</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
-  <Import Project="..\Zip.Shared\Zip.Shared.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\Zip.NetStandard\Zip.NetStandard.csproj">
+      <Project>{2fc3562b-71a0-4be6-b036-0792759da2a8}</Project>
+      <Name>Zip.NetStandard</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

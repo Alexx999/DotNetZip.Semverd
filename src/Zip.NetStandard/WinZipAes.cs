@@ -361,7 +361,7 @@ namespace Ionic.Zip
         // dependency to .NET 2.0.  AES is just a restricted form
         // of Rijndael (fixed block size of 128, some crypto modes not supported).
 
-        internal RijndaelManaged _aesCipher;
+        internal SymmetricAlgorithm _aesCipher;
         internal ICryptoTransform _xform;
 
         private const int BLOCK_SIZE_IN_BYTES = 16;
@@ -433,7 +433,7 @@ namespace Ionic.Zip
 
             _mac = new HMACSHA1(_params.MacIv);
 
-            _aesCipher = new System.Security.Cryptography.RijndaelManaged();
+            _aesCipher = Aes.Create();
             _aesCipher.BlockSize = 128;
             _aesCipher.KeySize = keySizeInBits;  // 128, 192, 256
             _aesCipher.Mode = CipherMode.ECB;
