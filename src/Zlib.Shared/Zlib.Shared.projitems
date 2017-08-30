@@ -8,19 +8,4 @@
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>Zlib.Shared</Import_RootNamespace>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)CRC32.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Deflate.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DeflateStream.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GZipStream.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Inflate.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)InfTree.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ParallelDeflateOutputStream.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Tree.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Zlib.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ZlibBaseStream.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ZlibCodec.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ZlibConstants.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ZlibStream.cs" />
-  </ItemGroup>
 </Project>
