@@ -32,6 +32,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using Zip.NetStandard.Crypto;
 
 #if AESCRYPTO
 namespace Ionic.Zip
@@ -179,8 +180,8 @@ namespace Ionic.Zip
         {
             //Console.WriteLine(" provided password: '{0}'", _Password);
 
-            System.Security.Cryptography.Rfc2898DeriveBytes rfc2898 =
-                new System.Security.Cryptography.Rfc2898DeriveBytes(_Password, Salt, Rfc2898KeygenIterations);
+            Rfc2898DeriveBytesCng rfc2898 =
+                new Rfc2898DeriveBytesCng(_Password, Salt, Rfc2898KeygenIterations);
 
             _keyBytes = rfc2898.GetBytes(_KeyStrengthInBytes); // 16 or 24 or 32 ???
             _MacInitializationVector = rfc2898.GetBytes(_KeyStrengthInBytes);
