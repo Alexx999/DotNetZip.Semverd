@@ -366,8 +366,9 @@ namespace Ionic.Zip
 
         private const int BLOCK_SIZE_IN_BYTES = 16;
 
-        private byte[] counter = new byte[BLOCK_SIZE_IN_BYTES];
-        private byte[] counterOut = new byte[BLOCK_SIZE_IN_BYTES];
+        private const int IOBUF_SIZE = 81920;
+        private byte[] counter = new byte[IOBUF_SIZE];
+        private byte[] counterOut = new byte[IOBUF_SIZE];
 
         // I've had a problem when wrapping a WinZipAesCipherStream inside
         // a DeflateStream. Calling Read() on the DeflateStream results in
@@ -447,7 +448,7 @@ namespace Ionic.Zip
 
             if (_mode == CryptoMode.Encrypt)
             {
-                _iobuf = new byte[2048];
+                _iobuf = new byte[IOBUF_SIZE];
                 _PendingWriteBlock = new byte[BLOCK_SIZE_IN_BYTES];
             }
 
@@ -482,16 +483,42 @@ namespace Ionic.Zip
         }
 
 
-        private void WriteTransformBlocks(byte[] buffer, int offset, int count)
+        private void WriteTransformBlocks2(byte[] buffer, int offset, int count)
         {
             int posn = offset;
             int last = count + offset;
 
+
+
             while (posn < buffer.Length && posn < last)
             {
-                WriteTransformOneBlock (buffer, posn);
+                WriteTransformOneBlock(buffer, posn);
                 posn += BLOCK_SIZE_IN_BYTES;
             }
+        }
+
+
+        private unsafe void WriteTransformBlocks(byte[] buffer, int offset, int count)
+        {
+            var requiredInts = count / BLOCK_SIZE_IN_BYTES;
+
+            fixed (byte* ptr = counter)
+            {
+                byte* curr = ptr;
+                for (int i = 0; i < requiredInts; i++)
+                {
+                    *(int*)curr = _nonce++;
+                    curr += BLOCK_SIZE_IN_BYTES;
+                }
+            }
+
+            _xform.TransformBlock(counter,
+                0,
+                count,
+                counterOut,
+                0);
+            XorInPlace(buffer, offset, count);
+            _mac.TransformBlock(buffer, offset, count, null, 0);
         }
 
 
