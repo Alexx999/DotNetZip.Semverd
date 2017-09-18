@@ -1927,7 +1927,7 @@ namespace Ionic.Zip
         ///
         /// <seealso cref="Ionic.Zip.ZipEntry.Encryption"/>
         /// <seealso cref="Ionic.Zip.ZipFile.Password">ZipFile.Password</seealso>
-        public string Password
+        public byte[] Password
         {
             set
             {
@@ -2753,7 +2753,7 @@ namespace Ionic.Zip
         internal bool _InputUsesZip64;
         private UInt32 _UnsupportedAlgorithmId;
 
-        internal string _Password;
+        internal byte[] _Password;
         internal ZipEntrySource _Source;
         internal EncryptionAlgorithm _Encryption;
         internal EncryptionAlgorithm _Encryption_FromZipFile;

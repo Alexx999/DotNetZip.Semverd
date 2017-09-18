@@ -1470,7 +1470,7 @@ namespace Ionic.Zip
             else if (this._Source == ZipEntrySource.ZipFile)
             {
                 // we are "re-streaming" the zip entry.
-                string pwd = (_Encryption_FromZipFile == EncryptionAlgorithm.None) ? null : (this._Password ?? this._container.Password);
+                byte[] pwd = (_Encryption_FromZipFile == EncryptionAlgorithm.None) ? null : (this._Password ?? this._container.Password);
                 this._sourceStream = InternalOpenReader(pwd);
                 PrepSourceStream();
                 input = this._sourceStream;
@@ -2271,7 +2271,7 @@ namespace Ionic.Zip
             if (Encryption == EncryptionAlgorithm.None)
                 return;
 
-            string pwd = this._Password;
+            var pwd = this._Password;
 
             // special handling for source == ZipFile.
             // Want to support the case where we re-stream an encrypted entry. This will involve,

@@ -272,7 +272,7 @@ namespace Ionic.Zip
         /// <param name="password">The password to check.</param>
         ///
         /// <returns>a bool indicating whether the password matches.</returns>
-        public static bool CheckZipPassword(string zipFileName, string password)
+        public static bool CheckZipPassword(string zipFileName, byte[] password)
         {
             // workitem 13664
             bool success = false;

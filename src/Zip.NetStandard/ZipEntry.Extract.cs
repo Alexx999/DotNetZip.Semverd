@@ -294,7 +294,7 @@ namespace Ionic.Zip
         /// </code>
         /// </example>
         /// <param name="password">The Password to use for decrypting the entry.</param>
-        public void ExtractWithPassword(string password)
+        public void ExtractWithPassword(byte[] password)
         {
             InternalExtractToBaseDir(".", password, _container, _Source, FileName);
         }
@@ -324,7 +324,7 @@ namespace Ionic.Zip
         ///
         /// <param name="baseDirectory">The pathname of the base directory.</param>
         /// <param name="password">The Password to use for decrypting the entry.</param>
-        public void ExtractWithPassword(string baseDirectory, string password)
+        public void ExtractWithPassword(string baseDirectory, byte[] password)
         {
             InternalExtractToBaseDir(baseDirectory, password, _container, _Source, FileName);
         }
@@ -347,7 +347,7 @@ namespace Ionic.Zip
         /// <param name="extractExistingFile">
         /// The action to take if extraction would overwrite an existing file.
         /// </param>
-        public void ExtractWithPassword(ExtractExistingFileAction extractExistingFile, string password)
+        public void ExtractWithPassword(ExtractExistingFileAction extractExistingFile, byte[] password)
         {
             ExtractExistingFile = extractExistingFile;
             InternalExtractToBaseDir(".", password, _container, _Source, FileName);
@@ -370,7 +370,7 @@ namespace Ionic.Zip
         /// overwrite an existing file.</param>
         ///
         /// <param name="password">The Password to use for decrypting the entry.</param>
-        public void ExtractWithPassword(string baseDirectory, ExtractExistingFileAction extractExistingFile, string password)
+        public void ExtractWithPassword(string baseDirectory, ExtractExistingFileAction extractExistingFile, byte[] password)
         {
             ExtractExistingFile = extractExistingFile;
             InternalExtractToBaseDir(baseDirectory, password, _container, _Source, FileName);
@@ -404,7 +404,7 @@ namespace Ionic.Zip
         /// <param name="password">
         ///   The password to use for decrypting the entry.
         /// </param>
-        public void ExtractWithPassword(Stream stream, string password)
+        public void ExtractWithPassword(Stream stream, byte[] password)
         {
             InternalExtractToStream(stream, password, _container, _Source, FileName);
         }
@@ -555,7 +555,7 @@ namespace Ionic.Zip
         ///
         /// <param name="password">The password to use for decrypting the entry.</param>
         /// <returns>The Stream for reading.</returns>
-        public Ionic.Crc.CrcCalculatorStream OpenReader(string password)
+        public Ionic.Crc.CrcCalculatorStream OpenReader(byte[] password)
         {
             // workitem 10923
             if (_container.ZipFile == null)
@@ -564,7 +564,7 @@ namespace Ionic.Zip
             return InternalOpenReader(password);
         }
 
-        internal Crc.CrcCalculatorStream InternalOpenReader(string password)
+        internal Crc.CrcCalculatorStream InternalOpenReader(byte[] password)
         {
             ValidateCompression(_CompressionMethod_FromZipFile, FileName, GetUnsupportedCompressionMethod(_CompressionMethod));
             ValidateEncryption(Encryption, FileName, _UnsupportedAlgorithmId);
@@ -652,7 +652,7 @@ namespace Ionic.Zip
         /// In other words, you can extract to a stream or to a directory (filesystem), but not both!
         /// The Password param is required for encrypted entries.
         /// </summary>
-        void InternalExtractToBaseDir(string baseDir, string password, ZipContainer zipContainer, ZipEntrySource zipEntrySource, string fileName)
+        void InternalExtractToBaseDir(string baseDir, byte[] password, ZipContainer zipContainer, ZipEntrySource zipEntrySource, string fileName)
         {
             if (baseDir == null)
                 throw new ArgumentNullException("baseDir");
@@ -764,7 +764,7 @@ namespace Ionic.Zip
         /// In other words, you can extract to a stream or to a directory (filesystem), but not both!
         /// The Password param is required for encrypted entries.
         /// </summary>
-        void InternalExtractToStream(Stream outStream, string password, ZipContainer zipContainer, ZipEntrySource zipEntrySource, string fileName)
+        void InternalExtractToStream(Stream outStream, byte[] password, ZipContainer zipContainer, ZipEntrySource zipEntrySource, string fileName)
         {
             // workitem 7958
             if (zipContainer == null)
@@ -923,7 +923,7 @@ namespace Ionic.Zip
 #endif
         }
 
-        void EnsurePassword(string password)
+        void EnsurePassword(byte[] password)
         {
             var p = password ?? _Password ?? _container.Password;
             if (p == null) throw new BadPasswordException();
@@ -1359,7 +1359,7 @@ namespace Ionic.Zip
         }
 
 
-        void SetupCryptoForExtract(string password)
+        void SetupCryptoForExtract(byte[] password)
         {
             //if (password == null) return;
             if (_Encryption_FromZipFile == EncryptionAlgorithm.None) return;

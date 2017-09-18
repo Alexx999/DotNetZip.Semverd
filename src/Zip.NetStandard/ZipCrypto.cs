@@ -62,7 +62,7 @@ namespace Ionic.Zip
         ///
         private ZipCrypto() { }
 
-        public static ZipCrypto ForWrite(string password)
+        public static ZipCrypto ForWrite(byte[] password)
         {
             ZipCrypto z = new ZipCrypto();
             if (password == null)
@@ -72,7 +72,7 @@ namespace Ionic.Zip
         }
 
 
-        public static ZipCrypto ForRead(string password, ZipEntry e)
+        public static ZipCrypto ForRead(byte[] password, ZipEntry e)
         {
             System.IO.Stream s = e._archiveStream;
             e._WeakEncryptionHeader = new byte[12];
@@ -292,11 +292,11 @@ namespace Ionic.Zip
         /// </para>
         ///
         /// </remarks>
-        public void InitCipher(string passphrase)
+        public void InitCipher(byte[] passphrase)
         {
-            byte[] p = SharedUtilities.StringToByteArray(passphrase);
+            //byte[] p = SharedUtilities.StringToByteArray(passphrase);
             for (int i = 0; i < passphrase.Length; i++)
-                UpdateKeys(p[i]);
+                UpdateKeys(passphrase[i]);
         }
 
 

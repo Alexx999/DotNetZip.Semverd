@@ -420,7 +420,7 @@ namespace Ionic.Zip
         /// </para>
         ///
         /// </remarks>
-        public String Password
+        public byte[] Password
         {
             set
             {
@@ -1610,7 +1610,7 @@ namespace Ionic.Zip
 
         private EncryptionAlgorithm _encryption;
         private ZipEntryTimestamp _timestamp;
-        internal String _password;
+        internal byte[] _password;
         private String _comment;
         private Stream _outputStream;
         private ZipEntry _currentEntry;
@@ -1688,7 +1688,7 @@ namespace Ionic.Zip
             }
         }
 
-        public string Password
+        public byte[] Password
         {
             get
             {
