@@ -60,16 +60,16 @@ namespace Ionic.Zip
         private Int16 PasswordVerificationStored;
         private Int16 PasswordVerificationGenerated;
         private int Rfc2898KeygenIterations = 1000;
-        private string _Password;
+        private byte[] _Password;
         private bool _cryptoGenerated ;
 
-        private WinZipAesCrypto(string password, int KeyStrengthInBits)
+        private WinZipAesCrypto(byte[] password, int KeyStrengthInBits)
         {
             _Password = password;
             _KeyStrengthInBits = KeyStrengthInBits;
         }
 
-        public static WinZipAesCrypto Generate(string password, int KeyStrengthInBits)
+        public static WinZipAesCrypto Generate(byte[] password, int KeyStrengthInBits)
         {
             WinZipAesCrypto c = new WinZipAesCrypto(password, KeyStrengthInBits);
 
@@ -82,7 +82,7 @@ namespace Ionic.Zip
 
 
 
-        public static WinZipAesCrypto ReadFromStream(string password, int KeyStrengthInBits, Stream s)
+        public static WinZipAesCrypto ReadFromStream(byte[] password, int KeyStrengthInBits, Stream s)
         {
             // from http://www.winzip.com/aes_info.htm
             //
@@ -157,7 +157,7 @@ namespace Ionic.Zip
             }
         }
 
-        public string Password
+        public byte[] Password
         {
             set
             {
@@ -179,13 +179,17 @@ namespace Ionic.Zip
         private void _GenerateCryptoBytes()
         {
             //Console.WriteLine(" provided password: '{0}'", _Password);
+            
+            var pbkdf2 = PBKDF2.Create();
+            var buffer = pbkdf2.GetBytes(_Password, Salt, Rfc2898KeygenIterations, _KeyStrengthInBytes * 2 + 2);
 
-            Rfc2898DeriveBytesCng rfc2898 =
-                new Rfc2898DeriveBytesCng(_Password, Salt, Rfc2898KeygenIterations);
+            _keyBytes = new byte[_KeyStrengthInBytes];
+            _MacInitializationVector = new byte[_KeyStrengthInBytes];
+            _generatedPv = new byte[2];
 
-            _keyBytes = rfc2898.GetBytes(_KeyStrengthInBytes); // 16 or 24 or 32 ???
-            _MacInitializationVector = rfc2898.GetBytes(_KeyStrengthInBytes);
-            _generatedPv = rfc2898.GetBytes(2);
+            Buffer.BlockCopy(buffer, 0, _keyBytes, 0, _KeyStrengthInBytes);
+            Buffer.BlockCopy(buffer, _KeyStrengthInBytes, _MacInitializationVector, 0, _KeyStrengthInBytes);
+            Buffer.BlockCopy(buffer, _KeyStrengthInBytes*2, _generatedPv, 0, 2);
 
             _cryptoGenerated = true;
         }

@@ -499,7 +499,7 @@ namespace  Ionic.Zip
         ///
         /// </code>
         /// </example>
-        public String Password
+        public byte[] Password
         {
             set
             {
@@ -812,7 +812,7 @@ namespace  Ionic.Zip
         private ZipContainer _container;
         private Ionic.Crc.CrcCalculatorStream _crcStream;
         private Int64 _LeftToRead;
-        internal String _Password;
+        internal byte[] _Password;
         private Int64 _endOfEntry;
         private string _name;
 

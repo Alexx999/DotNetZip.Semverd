@@ -1676,7 +1676,7 @@ namespace Ionic.Zip
         ///
         /// <seealso cref="Ionic.Zip.ZipFile.Encryption">ZipFile.Encryption</seealso>
         /// <seealso cref="Ionic.Zip.ZipEntry.Password">ZipEntry.Password</seealso>
-        public String Password
+        public byte[] Password
         {
             set
             {
@@ -3666,7 +3666,7 @@ namespace Ionic.Zip
         private string _name;
         private string _readName;
         private string _Comment;
-        internal string _Password;
+        internal byte[] _Password;
         private bool _emitNtfsTimes = true;
         private bool _emitUnixTimes;
         private Ionic.Zlib.CompressionStrategy _Strategy = Ionic.Zlib.CompressionStrategy.Default;
