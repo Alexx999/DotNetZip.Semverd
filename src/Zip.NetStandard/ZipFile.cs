@@ -3708,7 +3708,7 @@ namespace Ionic.Zip
         /// <summary>
         ///   Default size of the buffer used for IO.
         /// </summary>
-        public static readonly int BufferSizeDefault = 32768;
+        public static readonly int BufferSizeDefault = 81920;
 
         #endregion
     }
