@@ -23,24 +23,48 @@ namespace Zip.NetStandard.Crypto
             [In, MarshalAs(UnmanagedType.LPWStr)] string pszImplementation, 
             [In] int dwFlags);
 
-        private static readonly IntPtr HmacSha1Handle;
+        private static ObjectPool<BcryptAlgoritmHandle> _objectPool;
 
         static PBKDF2Cng()
         {
-            var code = BCryptOpenAlgorithmProvider(out HmacSha1Handle, "SHA1", null,
+            var version = Environment.OSVersion.Version;
+            if (version.Major == 6 && version.Minor < 2)
+            {
+                _objectPool = ObjectPool.GetObjectPool(CreateHandleWin7, PoolingPolicy.AlwaysCreate);
+            }
+            else
+            {
+                _objectPool = ObjectPool.GetObjectPool(CreateHandleWin8, PoolingPolicy.Reuse);
+            }
+        }
+
+        private static BcryptAlgoritmHandle CreateHandleWin7()
+        {
+            var code = BCryptOpenAlgorithmProvider(out var handle, "SHA1", null,
+                BCRYPT_ALG_HANDLE_HMAC_FLAG);
+            return new BcryptAlgoritmHandle(handle);
+        }
+
+        private static BcryptAlgoritmHandle CreateHandleWin8()
+        {
+            var code = BCryptOpenAlgorithmProvider(out var handle, "SHA1", null,
                 BCRYPT_ALG_HANDLE_HMAC_FLAG | BCRYPT_HASH_REUSABLE_FLAG);
+            return new BcryptAlgoritmHandle(handle);
         }
 
         public override unsafe byte[] GetBytes(byte[] password, byte[] salt, int iterations, int size)
         {
+            var handle = _objectPool.GetObject();
+
             var result = new byte[size];
             fixed (byte* pwd = password)
             fixed (byte* slt = salt)
             fixed (byte* res = result)
             {
-                var code = BCryptDeriveKeyPBKDF2(HmacSha1Handle, pwd, password.Length, slt, salt.Length, iterations, res, size);
+                var code = BCryptDeriveKeyPBKDF2(handle.Handle, pwd, password.Length, slt, salt.Length, iterations, res, size);
             }
 
+            _objectPool.PutObject(handle);
             return result;
         }
     }
